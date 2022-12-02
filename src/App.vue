@@ -1,9 +1,16 @@
-<script lang="ts" src="@/App.ts"></script>
+<script setup lang="ts">
+import { RouterView } from 'vue-router';
+import NavBar from './shared/components/NavBar.vue';
+</script>
 
 <template>
   <div class="wrapper">
-    <h1>{{ counter }}</h1>
-    <button @click="counter++">+1</button>
+    <header>
+      <NavBar />
+    </header>
+    <main>
+      <RouterView />
+    </main>
   </div>
 </template>
 
