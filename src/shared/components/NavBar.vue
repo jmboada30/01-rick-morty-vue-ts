@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+
+const props = defineProps<{ title: string }>();
 </script>
 
 <template>
   <nav>
     <img src="@/assets/logo.svg" alt="Logo Vue" height="25" width="25" />
-    <span>algo</span>
+    <span>{{ props.title }}</span>
 
     <RouterLink to="/">Inicio</RouterLink>
     <RouterLink to="/about">Sobre</RouterLink>
