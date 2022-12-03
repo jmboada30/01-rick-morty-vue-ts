@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import type { RouteLink } from '@/router/link-routes';
 
-const props = defineProps<{ title: string }>();
+export interface Props {
+  title: string;
+  links: RouteLink[];
+}
+
+const props = defineProps<Props>();
 </script>
 
 <template>
@@ -9,8 +14,9 @@ const props = defineProps<{ title: string }>();
     <img src="@/assets/logo.svg" alt="Logo Vue" height="25" width="25" />
     <span>{{ props.title }}</span>
 
-    <RouterLink to="/">Inicio</RouterLink>
-    <RouterLink to="/about">Sobre</RouterLink>
+    <RouterLink v-for="link of props.links" :key="link.name" :to="link.path">{{
+      link.title
+    }}</RouterLink>
   </nav>
 </template>
 
