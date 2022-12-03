@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AboutPage from '@/shared/pages/AboutPage.vue';
 import HomePage from '@/shared/pages/HomePage.vue';
+import characterRoute from '@/characters/router';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,11 +11,7 @@ const router = createRouter({
     { path: '/about', name: 'about', component: AboutPage },
 
     // Characters
-    {
-      path: '/characters',
-      name: 'characters',
-      component: import('@/characters/layout/CharacterLayout.vue'),
-    },
+    { ...characterRoute, path: '/characters' },
 
     // Defaults
     {
@@ -23,5 +20,8 @@ const router = createRouter({
     },
   ],
 });
+
+// 2da forma de agregar rutas
+// router.addRoute(characterRoute);
 
 export default router;
