@@ -2,17 +2,27 @@
 import type { RouteLink } from '@/router/link-routes';
 
 export interface Props {
-  title: string;
-  links: RouteLink[];
+  title?: string;
+  links?: RouteLink[];
+  showIcon?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  links: () => [],
+  showIcon: true,
+});
 </script>
 
 <template>
   <nav>
-    <img src="@/assets/logo.svg" alt="Logo Vue" height="25" width="25" />
-    <span>{{ props.title }}</span>
+    <img
+      v-if="props.showIcon"
+      src="@/assets/logo.svg"
+      alt="Logo Vue"
+      height="25"
+      width="25"
+    />
+    <span v-if="props.title">{{ props.title }}</span>
 
     <RouterLink v-for="link of props.links" :key="link.name" :to="link.path">{{
       link.title
