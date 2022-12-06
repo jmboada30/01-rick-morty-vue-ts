@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import rickAndMortyApi from '@/api/rickAndMortyApi';
-import type { CharacterRickMorty } from '../interfaces/character';
+import { ref } from 'vue';
+import type {
+  CharacterRickMorty,
+  CharacterRickMortyResp,
+} from '../interfaces/character';
 
-rickAndMortyApi.get<CharacterRickMorty[]>('/character').then((res) => {
+const characters = ref<CharacterRickMorty[]>([]);
+rickAndMortyApi.get<CharacterRickMortyResp>('/character').then((res) => {
   console.log(res.data);
+  characters.value = res.data.results;
 });
 </script>
 
 <template>
   <ul>
-    <li>Hola</li>
-    <li>Hola</li>
-    <li>Hola</li>
+    <li v-for="character of characters" :key="character.id">
+      {{ character.name }}
+    </li>
   </ul>
 </template>
 
