@@ -5,7 +5,9 @@ const props = defineProps<{ title: string; visible: boolean }>();
 <template>
   <h2>{{ props.title }}</h2>
 
-  <CardList></CardList>
+  <Suspense>
+    <CardList></CardList>
+  </Suspense>
 </template>
 
 <style scoped></style>

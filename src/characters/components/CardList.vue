@@ -6,11 +6,10 @@ import type {
   CharacterRickMortyResp,
 } from '../interfaces/character';
 
-const characters = ref<CharacterRickMorty[]>([]);
-rickAndMortyApi.get<CharacterRickMortyResp>('/character').then((res) => {
-  console.log(res.data);
-  characters.value = res.data.results;
-});
+const { data } = await rickAndMortyApi.get<CharacterRickMortyResp>(
+  '/character'
+);
+const characters = ref<CharacterRickMorty[]>(data.results);
 </script>
 
 <template>
