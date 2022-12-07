@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import rickAndMortyApi from '@/api/rickAndMortyApi';
-import { ref } from 'vue';
-import type {
-  CharacterRickMorty,
-  CharacterRickMortyResp,
-} from '../interfaces/character';
+// import rickAndMortyApi from '@/api/rickAndMortyApi';
+// import { ref } from 'vue';
+// import type {
+//   CharacterRickMorty,
+//   CharacterRickMortyResp,
+// } from '../interfaces/character';
 
-const { data } = await rickAndMortyApi.get<CharacterRickMortyResp>(
-  '/character'
-);
-const characters = ref<CharacterRickMorty[]>(data.results);
+import { useCharacters } from '../composables/useCharacters';
+
+const { isLoading, characters } = useCharacters();
 </script>
 
 <template>
+  <h1 v-if="isLoading">Loading...</h1>
   <ul>
     <li v-for="character of characters" :key="character.id">
       {{ character.name }}
