@@ -1,18 +1,11 @@
 <script setup lang="ts">
-// import rickAndMortyApi from '@/api/rickAndMortyApi';
-// import { ref } from 'vue';
-// import type {
-//   CharacterRickMorty,
-//   CharacterRickMortyResp,
-// } from '../interfaces/character';
-
-import { useCharacters } from '../composables/useCharacters';
-
-const { isLoading, characters } = useCharacters();
+import { useCharacters } from '@/characters/composables/useCharacters';
+const { isLoading, characters, hasError, errorMessage } = useCharacters();
 </script>
 
 <template>
   <h1 v-if="isLoading">Loading...</h1>
+  <h1 v-if="hasError">{{ errorMessage }}</h1>
   <ul>
     <li v-for="character of characters" :key="character.id">
       {{ character.name }}
