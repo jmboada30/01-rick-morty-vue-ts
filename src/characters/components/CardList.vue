@@ -4,6 +4,7 @@
 // const { isLoading, characters, hasError, errorMessage } = useCharacters();
 
 // USANDO @tanstack/vue-query
+// refrescar la data cada vez que se conecte a internet y el cacheTime es de 1 minuto
 import { useQuery } from '@tanstack/vue-query';
 
 const getCharacterSlow = async () => {
@@ -17,7 +18,10 @@ const {
   isError,
   error,
   isLoading,
-} = useQuery(['characters'], getCharacterSlow);
+} = useQuery(['characters'], getCharacterSlow, {
+  cacheTime: 1000 * 60,
+  refetchOnReconnect: 'always'
+});
 </script>
 
 <template>
