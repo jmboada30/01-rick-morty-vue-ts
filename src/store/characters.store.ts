@@ -21,14 +21,22 @@ const characterStore = reactive<Store>({
     characters: {
         list: [],
         count: 0,
-        isLoading: false,
+        isLoading: true,
         hasError: false,
         errorMessage: null,
     },
 
     // Methods
     startLoadingCharacters() {},
-    loadedCharacters(characters: CharacterRickMorty[]) {},
+    loadedCharacters(characters: CharacterRickMorty[]) {
+        this.characters = {
+            list: characters,
+            count: characters.length,
+            isLoading: false,
+            hasError: false,
+            errorMessage: null,
+        }
+    },
     loadCharactersFailed(errorMessage: string) {},
 });
 
