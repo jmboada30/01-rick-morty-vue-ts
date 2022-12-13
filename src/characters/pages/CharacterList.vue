@@ -1,28 +1,33 @@
 <script setup lang="ts">
-import rickAndMortyApi from '@/api/rickAndMortyApi';
-import CardList from '@/characters/components/CardList.vue';
 import { useQuery } from '@tanstack/vue-query';
-import type { CharacterRickMortyResp } from '../interfaces/character';
+import characterStore from '@/store/characters.store';
+
+import CardList from '@/characters/components/CardList.vue';
+import rickAndMortyApi from '@/api/rickAndMortyApi';
+import type { CharacterRickMortyResp } from '@/characters/interfaces/character';
+
 const props = defineProps<{ title: string; visible: boolean }>();
 
-const {
-  data: charactersResp,
-  isError,
-  error,
-  isLoading,
-} = useQuery(['characters'], () =>
-  rickAndMortyApi.get<CharacterRickMortyResp>('character')
-);
+// const {
+//   data: charactersResp,
+//   isError,
+//   error,
+//   isLoading,
+// } = useQuery(['characters'], () =>
+//   rickAndMortyApi.get<CharacterRickMortyResp>('character')
+// );
 </script>
 
 <template>
-  <h1 v-if="isError">{{ error }}</h1>
+  <h1 v-if="characterStore.characters.hasError">
+    {{ characterStore.characters.errorMessage }}
+  </h1>
 
-  <h1 v-if="isLoading">Loading...</h1>
+  <h1 v-if="characterStore.characters.isLoading">Loading...</h1>
 
   <template v-else>
     <h2>{{ props.title }}</h2>
-    <CardList :characters="charactersResp!.data.results"></CardList>
+    <CardList :characters="characterStore.characters.list"></CardList>
   </template>
 </template>
 
