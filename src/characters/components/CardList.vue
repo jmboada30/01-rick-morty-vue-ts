@@ -1,35 +1,17 @@
 <script setup lang="ts">
-// USANDO COMPOSABLES
-// import { useCharacters } from '@/characters/composables/useCharacters';
-// const { isLoading, characters, hasError, errorMessage } = useCharacters();
+import type { CharacterRickMorty } from "../interfaces/character";
+import CharacterCard from "./CharacterCard.vue";
 
-// USANDO @tanstack/vue-query
-// refrescar la data cada vez que se conecte a internet y el cacheTime es de 1 minuto
-import { useQuery } from '@tanstack/vue-query';
-import CharacterCard from '@/characters/components/CharacterCard.vue';
-
-const getCharacterSlow = async () => {
-  const response = await fetch('https://rickandmortyapi.com/api/character');
-  const data = await response.json();
-  return data.results;
-};
-
-const {
-  data: characters,
-  isError,
-  error,
-  isLoading,
-} = useQuery(['characters'], getCharacterSlow, {
-  cacheTime: 1000 * 60,
-  refetchOnReconnect: 'always',
-});
+const props = defineProps<{ characters: CharacterRickMorty[] }>();
 </script>
 
 <template>
-  <h1 v-if="isLoading">Loading...</h1>
-  <h1 v-if="isError">{{ error }}</h1>
   <ul class="card-list">
-    <CharacterCard v-for="character of characters" :key="character.id" :character="character">
+    <CharacterCard
+      v-for="character of props.characters"
+      :key="character.id"
+      :character="character"
+    >
       {{ character.name }}
     </CharacterCard>
   </ul>
