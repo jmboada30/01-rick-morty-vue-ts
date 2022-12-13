@@ -6,6 +6,7 @@
 // USANDO @tanstack/vue-query
 // refrescar la data cada vez que se conecte a internet y el cacheTime es de 1 minuto
 import { useQuery } from '@tanstack/vue-query';
+import CharacterCard from '@/characters/components/CharacterCard.vue';
 
 const getCharacterSlow = async () => {
   const response = await fetch('https://rickandmortyapi.com/api/character');
@@ -20,18 +21,24 @@ const {
   isLoading,
 } = useQuery(['characters'], getCharacterSlow, {
   cacheTime: 1000 * 60,
-  refetchOnReconnect: 'always'
+  refetchOnReconnect: 'always',
 });
 </script>
 
 <template>
   <h1 v-if="isLoading">Loading...</h1>
   <h1 v-if="isError">{{ error }}</h1>
-  <ul>
-    <li v-for="character of characters" :key="character.id">
+  <ul class="card-list">
+    <CharacterCard v-for="character of characters" :key="character.id" :character="character">
       {{ character.name }}
-    </li>
+    </CharacterCard>
   </ul>
 </template>
 
-<style scoped></style>
+<style scoped>
+.card-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+</style>
