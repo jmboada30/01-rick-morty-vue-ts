@@ -14,10 +14,24 @@ interface Store {
     errorMessage: string | null;
   };
 
-  // Methods
+  ids: {
+    list: {
+      [id: string]: CharacterRickMorty;
+    };
+    isLoading: boolean;
+    hasError: boolean;
+    errorMessage: string | null;
+  }
+
+  // Character methods
   startLoadingCharacters: () => void;
   loadedCharacters: (characters: CharacterRickMorty[]) => void;
   loadCharactersFailed: (errorMessage: string) => void;
+  
+  // Ids methods
+  startLoadingCharacter: () => void;
+  checkIdInStore: (id: string) => boolean;
+  loadedCharacter: (character: CharacterRickMorty) => void;
 }
 
 // Initial state
@@ -30,7 +44,7 @@ const characterStore = reactive<Store>({
     errorMessage: null,
   },
 
-  // Methods
+  // Characters Methods
   async startLoadingCharacters() {
     const { data } = await rickAndMortyApi.get<CharacterRickMortyResp>(
       'character'
@@ -57,6 +71,33 @@ const characterStore = reactive<Store>({
       errorMessage,
     };
   },
+
+  ids: {
+    list: {},
+    isLoading: false,
+    hasError: false,
+    errorMessage: null,
+  },
+
+  // Ids Methods
+  startLoadingCharacter() {
+    this.ids = {
+      ...this.ids,
+      isLoading: true,
+      hasError: false,
+      errorMessage: null,
+    }
+  },
+
+  checkIdInStore(id: string) { 
+    return !!this.ids.list[id];
+  },
+
+  loadedCharacter(character: CharacterRickMorty) {
+    this.ids.isLoading = false;
+    this.ids.list[character.id] = character;
+  },
+
 });
 
 characterStore.startLoadingCharacters();
