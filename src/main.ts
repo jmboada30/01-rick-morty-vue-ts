@@ -8,6 +8,8 @@ import router from './router';
 
 const app = createApp(App);
 
+import '@/store/characters.store';
+
 VueQueryPlugin.install(app, {
   queryClientConfig: {
     defaultOptions: {

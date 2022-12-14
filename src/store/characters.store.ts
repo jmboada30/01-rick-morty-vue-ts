@@ -1,5 +1,6 @@
+import rickAndMortyApi from '@/api/rickAndMortyApi';
 import { reactive } from 'vue';
-import type { CharacterRickMorty } from './../characters/interfaces/character';
+import type { CharacterRickMorty, CharacterRickMortyResp } from './../characters/interfaces/character';
 
 interface Store {
   characters: {
@@ -27,7 +28,13 @@ const characterStore = reactive<Store>({
     },
 
     // Methods
-    startLoadingCharacters() {},
+    async startLoadingCharacters() {
+      const { data } = await rickAndMortyApi.get<CharacterRickMortyResp>(
+        'character'
+      );
+      this.loadedCharacters(data.results);
+    },
+
     loadedCharacters(characters: CharacterRickMorty[]) {
         this.characters = {
             list: characters,
@@ -37,7 +44,10 @@ const characterStore = reactive<Store>({
             errorMessage: null,
         }
     },
+
     loadCharactersFailed(errorMessage: string) {},
 });
 
+
+characterStore.startLoadingCharacters();
 export default characterStore;

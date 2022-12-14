@@ -8,12 +8,21 @@ import type { CharacterRickMortyResp } from '@/characters/interfaces/character';
 
 const props = defineProps<{ title: string; visible: boolean }>();
 
-useQuery(['characters'], () =>
-  rickAndMortyApi.get<CharacterRickMortyResp>('character'),
-  {
-    onSuccess: (data) => characterStore.loadedCharacters(data.data.results),
+const getCharactersCacheFirst = async () => {
+  if (characterStore.characters.count > 0) {
+    return characterStore.characters.list;
   }
-);
+
+  const { data } = await rickAndMortyApi.get<CharacterRickMortyResp>(
+    'character'
+  );
+
+  return data.results;
+};
+
+useQuery(['characters'], getCharactersCacheFirst, {
+  onSuccess: (data) => characterStore.loadedCharacters(data),
+});
 </script>
 
 <template>
