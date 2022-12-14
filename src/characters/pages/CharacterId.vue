@@ -1,9 +1,14 @@
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+</script>
+
 <template>
   <div>
-    <h1>Character Id</h1>
+    <h1>Character # {{route.params.id}}</h1>
   </div>
 </template>
 
-<script setup lang="ts"></script>
 
 <style scoped></style>
