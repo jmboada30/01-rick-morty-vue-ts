@@ -5,6 +5,7 @@ import characterStore from '@/store/characters.store';
 import CardList from '@/characters/components/CardList.vue';
 import rickAndMortyApi from '@/api/rickAndMortyApi';
 import type { CharacterRickMortyResp } from '@/characters/interfaces/character';
+import axios from 'axios';
 
 const props = defineProps<{ title: string; visible: boolean }>();
 
@@ -21,16 +22,23 @@ const getCharactersCacheFirst = async () => {
 };
 
 useQuery(['characters'], getCharactersCacheFirst, {
-  onSuccess: (data) => characterStore.loadedCharacters(data),
+  onSuccess: (data) => characterStore.loadedCharacters(data!),
+  onError: (error) => {
+    axios.isAxiosError(error)
+      ? characterStore.loadCharactersFailed(error.message)
+      : characterStore.loadCharactersFailed('Ocurrio un error');
+  },
 });
 </script>
 
 <template>
-  <h1 v-if="characterStore.characters.hasError">
-    {{ characterStore.characters.errorMessage }}
-  </h1>
 
   <h1 v-if="characterStore.characters.isLoading">Loading...</h1>
+
+
+  <h1 v-else-if="characterStore.characters.hasError">
+    Error: {{ characterStore.characters.errorMessage }}
+  </h1>
 
   <template v-else>
     <h2>{{ props.title }}</h2>

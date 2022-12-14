@@ -1,6 +1,9 @@
 import rickAndMortyApi from '@/api/rickAndMortyApi';
 import { reactive } from 'vue';
-import type { CharacterRickMorty, CharacterRickMortyResp } from './../characters/interfaces/character';
+import type {
+  CharacterRickMorty,
+  CharacterRickMortyResp,
+} from './../characters/interfaces/character';
 
 interface Store {
   characters: {
@@ -19,35 +22,43 @@ interface Store {
 
 // Initial state
 const characterStore = reactive<Store>({
-    characters: {
-        list: [],
-        count: 0,
-        isLoading: true,
-        hasError: false,
-        errorMessage: null,
-    },
+  characters: {
+    list: [],
+    count: 0,
+    isLoading: true,
+    hasError: false,
+    errorMessage: null,
+  },
 
-    // Methods
-    async startLoadingCharacters() {
-      const { data } = await rickAndMortyApi.get<CharacterRickMortyResp>(
-        'character'
-      );
-      this.loadedCharacters(data.results);
-    },
+  // Methods
+  async startLoadingCharacters() {
+    const { data } = await rickAndMortyApi.get<CharacterRickMortyResp>(
+      'character'
+    );
+    this.loadedCharacters(data.results);
+  },
 
-    loadedCharacters(characters: CharacterRickMorty[]) {
-        this.characters = {
-            list: characters,
-            count: characters.length,
-            isLoading: false,
-            hasError: false,
-            errorMessage: null,
-        }
-    },
+  loadedCharacters(characters: CharacterRickMorty[]) {
+    this.characters = {
+      list: characters,
+      count: characters.length,
+      isLoading: false,
+      hasError: false,
+      errorMessage: null,
+    };
+  },
 
-    loadCharactersFailed(errorMessage: string) {},
+  loadCharactersFailed(errorMessage: string) {
+    this.characters = {
+      list: [],
+      count: 0,
+      isLoading: false,
+      hasError: true,
+      errorMessage,
+    };
+  },
 });
 
-
 characterStore.startLoadingCharacters();
+
 export default characterStore;
