@@ -23,11 +23,16 @@ const loadedCharacter = (data: CharacterRickMorty) => {
   characterSet.value[data.id] = data;
 };
 
+const loadedWithError = (error: Error) => {
+  hasError.value = true;
+  errorMessage.value = error.message;
+};
+
 const useCharacter = (characterId: string) => {
   const { isLoading } = useQuery(
     ['characters', characterId],
     () => getCharacter(characterId),
-    { onSuccess: loadedCharacter }
+    { onSuccess: loadedCharacter, onError: loadedWithError }
   );
 
   return {
