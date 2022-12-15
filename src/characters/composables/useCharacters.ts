@@ -23,16 +23,23 @@ const loadedCharacters = (data: CharacterRickMorty[]) => {
   characters.value = data;
 };
 
-export const useCharacters = () => {
+const useCharacters = () => {
   const { isLoading } = useQuery(['characters'], getCharacters, {
     onSuccess: loadedCharacters,
   });
 
   return {
+    // properties
     characters,
-    isLoading,
-    hasError,
     errorMessage,
+    hasError,
+    isLoading,
+
+    // getters
     count: computed(() => characters.value.length),
+
+    // methods
   };
 };
+
+export default useCharacters;

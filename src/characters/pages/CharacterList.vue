@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCharacters } from '@/characters/composables/useCharacters';
+import useCharacters from '@/characters/composables/useCharacters';
 import CardList from '../components/CardList.vue';
 
 defineProps<{ title: string; visible: boolean }>();
