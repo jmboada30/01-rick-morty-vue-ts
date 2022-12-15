@@ -1,40 +1,38 @@
+import { ref, computed } from 'vue';
 import rickAndMortyApi from '@/api/rickAndMortyApi';
-import axios from 'axios';
-import { ref, onMounted } from 'vue';
+
 import type {
   CharacterRickMorty,
   CharacterRickMortyResp,
 } from '../interfaces/character';
+import { useQuery } from '@tanstack/vue-query';
 
 const characters = ref<CharacterRickMorty[]>([]);
-const isLoading = ref<boolean>(true);
 const hasError = ref<boolean>(false);
-const errorMessage = ref<string>();
+const errorMessage = ref<string | null>(null);
+
+const getCharacters = async () => {
+  if (characters.value.length > 0) return characters.value;
+  const resp = await rickAndMortyApi.get<CharacterRickMortyResp>('character');
+  return resp.data.results;
+};
+
+const loadedCharacters = (data: CharacterRickMorty[]) => {
+  hasError.value = false;
+  errorMessage.value = null;
+  characters.value = data;
+};
 
 export const useCharacters = () => {
-  onMounted(async () => {
-    await loadCharacters();
+  const { isLoading } = useQuery(['characters'], getCharacters, {
+    onSuccess: loadedCharacters,
   });
 
-  const loadCharacters = async () => {
-    if (characters.value.length > 0) return (isLoading.value = false);
-
-    try {
-      isLoading.value = true;
-      const { data } = await rickAndMortyApi.get('/character');
-      characters.value = data.results;
-    } catch (error) {
-      hasError.value = true;
-
-      if (axios.isAxiosError(error)) {
-        return (errorMessage.value = error.message);
-      }
-
-      errorMessage.value = JSON.stringify(error);
-    } finally {
-      isLoading.value = false;
-    }
+  return {
+    characters,
+    isLoading,
+    hasError,
+    errorMessage,
+    count: computed(() => characters.value.length),
   };
-
-  return { characters, isLoading, hasError, errorMessage };
 };
