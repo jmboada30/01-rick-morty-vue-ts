@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import useCharacter from '@/characters/composables/useCharacter';
 
 const route = useRoute();
+const router = useRouter();
 const { id } = route.params as { id: string };
 const { character, isLoading, hasError, errorMessage } = useCharacter(id);
+
+watchEffect(() => {
+  if (hasError.value && !isLoading.value) {
+    errorMessage.value = errorMessage.value + ' - Redirecting...';
+    setTimeout(() => router.replace('/characters'), 3000);
+  }
+});
 </script>
 
 <template>
